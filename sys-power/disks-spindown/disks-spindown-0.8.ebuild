@@ -20,5 +20,7 @@ DEPEND="
 src_install() {
 	cd ${S}/src
 	mkdir ${D}/etc
+	mkdir -p ${D}/usr/bin
 	cp -R conf.d init.d ${D}/etc
+	cp disks-spindown ${D}/usr/bin
 }
