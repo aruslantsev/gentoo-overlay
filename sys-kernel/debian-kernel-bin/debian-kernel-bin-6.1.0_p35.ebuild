@@ -10,7 +10,7 @@ S=${WORKDIR}
 DESCRIPTION="Pre-built Debian Linux kernel"
 HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
 SRC_URI="
-	https://ftp.debian.org/debian/pool/main/l/linux-signed-amd64/linux-image-6.1.0-11-amd64_6.1.38-4_amd64.deb
+	https://ftp.debian.org/debian/pool/main/l/linux-signed-amd64/linux-image-6.1.0-35-amd64_6.1.137-1_amd64.deb
 "
 
 LICENSE="GPL-2"

@@ -10,7 +10,7 @@ S=${WORKDIR}
 DESCRIPTION="Pre-built Debian Linux kernel"
 HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
 SRC_URI="
-	https://ftp.debian.org/debian/pool/main/l/linux-signed-amd64/linux-image-6.4.0-4-amd64_6.4.13-1_amd64.deb
+	https://ftp.debian.org/debian/pool/main/l/linux-signed-amd64/linux-image-6.12.29-amd64_6.12.29-1_amd64.deb
 "
 
 LICENSE="GPL-2"
@@ -35,7 +35,7 @@ src_unpack () {
 src_install() {
 	cd ${S}
 	cp -R boot ${D} || die "Install failed"
-	cp -R lib ${D} || die "Install failed"
+	cp -R usr/lib ${D} || die "Install failed"
 	# cp -R usr ${D} || die "Install failed" # Nothing valuable
 }
 
