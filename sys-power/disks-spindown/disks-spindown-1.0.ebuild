@@ -10,12 +10,17 @@ SRC_URI="https://github.com/aruslantsev/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 ~x86"
 
 DEPEND="
+	app-shells/bash
 	sys-apps/hdparm
 	sys-apps/smartmontools
 "
+
+src_compile() {
+	einfo "Nothing to compile"
+}
 
 src_install() {
 	cd ${S}/src
