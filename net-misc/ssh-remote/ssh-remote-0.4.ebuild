@@ -24,9 +24,7 @@ src_compile() {
 src_install() {
 	cd ${S}/src
 	mkdir ${D}/etc
-	mkdir -p ${D}/usr/bin
 	cp -R conf.d init.d ${D}/etc
-	cp ssh-remote ${D}/usr/bin
 }
 
 pkg_postinst() {
