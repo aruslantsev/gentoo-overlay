@@ -3,14 +3,13 @@
 
 EAPI=8
 
-KV_LOCALVERSION="-amd64"
-KPV=${PV}${KV_LOCALVERSION}
+KV_LOCALVERSION="+deb13-amd64"
 S=${WORKDIR}
 
 DESCRIPTION="Pre-built Debian Linux kernel"
 HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
 SRC_URI="
-	https://ftp.debian.org/debian/pool/main/l/linux-signed-amd64/linux-image-6.12.29-amd64_6.12.29-1_amd64.deb
+	https://ftp.debian.org/debian/pool/main/l/linux-signed-amd64/linux-image-${PV}${KV_LOCALVERSION}_${PV}-1_amd64.deb
 "
 
 LICENSE="GPL-2"
@@ -40,18 +39,17 @@ src_install() {
 }
 
 pkg_postinst() {
-	MY_KPV=$(sed -e "s/_p/-/" <<< $KPV)
 	einfo "Running depmod."
 	if [ -x "$(command -v depmod)" ]
 	then
-		depmod -b ${ROOT}/ ${MY_KPV} || die "depmod failed"
+		depmod -b ${ROOT}/ ${PV}${KV_LOCALVERSION} || die "depmod failed"
 	else
 		ewarn "depmod is missing"
 	fi
 	if use initramfs
 	then
-		einfo "Creating initramfs at ${ROOT}/boot/initramfs-${MY_KPV}.img"
-		dracut --force --kver ${MY_KPV} ${ROOT}/boot/initramfs-${MY_KPV}.img || die "dracut failed"
+		einfo "Creating initramfs at ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img"
+		dracut --force --kver ${PV}${KV_LOCALVERSION} ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img || die "dracut failed"
 	else
 		einfo "This package does not provide initramfs."
 		einfo "You may need to build it yourself or to install sys-kernel/dracut"
@@ -59,15 +57,17 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	MY_KPV=$(sed -e "s/_p/-/" <<< $KPV)
 	if use initramfs
 	then
-		if [ -f ${ROOT}/boot/initramfs-${MY_KPV}.img ]
+		if [ -f ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img ]
 		then
-			einfo "Removing old initramfs"
-			rm ${ROOT}/boot/initramfs-${MY_KPV}.img || ewarn "Initramfs remove failed"
-		else
-			einfo "Initramfs was not found"
+			einfo "Removing initramfs ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img"
+			rm ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img || ewarn "Initramfs remove failed"
 		fi
+	fi
+	if [ -d ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION} ]
+	then
+		einfo "Removing modules directory ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION}"
+		rm -r ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION} || ewarn "Modules were not removed"
 	fi
 }
