@@ -60,14 +60,8 @@ pkg_postinst() {
 
 pkg_postrm() {
 	MY_KPV=$(sed -e "s/_p/-/" <<< $KPV)
-	if use initramfs
+	if [ -f ${ROOT}/boot/initramfs-${MY_KPV}.img ]
 	then
-		if [ -f ${ROOT}/boot/initramfs-${MY_KPV}.img ]
-		then
-			einfo "Removing old initramfs"
-			rm ${ROOT}/boot/initramfs-${MY_KPV}.img || ewarn "Initramfs remove failed"
-		else
-			einfo "Initramfs was not found"
-		fi
+		ewarn "Initramfs at ${ROOT}/boot/initramfs-${MY_KPV}.img was not removed"
 	fi
 }

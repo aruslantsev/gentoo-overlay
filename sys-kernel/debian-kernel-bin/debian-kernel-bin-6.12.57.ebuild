@@ -57,17 +57,12 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	if use initramfs
+	if [ -f ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img ]
 	then
-		if [ -f ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img ]
-		then
-			einfo "Removing initramfs ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img"
-			rm ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img || ewarn "Initramfs remove failed"
-		fi
+		einfo "Initramfs at ${ROOT}/boot/initramfs-${PV}${KV_LOCALVERSION}.img was not removed"
 	fi
 	if [ -d ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION} ]
 	then
-		einfo "Removing modules directory ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION}"
-		rm -r ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION} || ewarn "Modules were not removed"
+		einfo "Modules directory ${ROOT}/usr/lib/modules/${PV}${KV_LOCALVERSION} was not removed"
 	fi
 }
