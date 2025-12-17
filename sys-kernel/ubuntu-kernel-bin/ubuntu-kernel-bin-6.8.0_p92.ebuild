@@ -34,7 +34,7 @@ src_unpack () {
 	for file in ${A}
 	do
 		unpack ${file}
-		tar xpf data.tar.zst || die "Unpack failed"
+		tar xpf data.tar* && rm data.tar* || die "Unpack failed"
 	done
 }
 
@@ -66,17 +66,12 @@ pkg_postinst() {
 
 pkg_postrm() {
 	MY_KPV=$(sed -e "s/_p/-/" <<< $KPV)
-	if use initramfs
+	if [ -f ${ROOT}/boot/initramfs-${MY_KPV}.img ]
 	then
-		if [ -f ${ROOT}/boot/initramfs-${MY_KPV}.img ]
-		then
-			einfo "Removing initramfs at ${ROOT}/boot/initramfs-${MY_KPV}.img"
-			rm ${ROOT}/boot/initramfs-${MY_KPV}.img || ewarn "Initramfs remove failed"
-		fi
+		einfo "Initramfs at ${ROOT}/boot/initramfs-${MY_KPV}.img is not removed"
 	fi
 	if [ -d ${ROOT}/usr/lib/modules/${MY_KPV} ]
 	then
-		einfo "Removing modules directory ${ROOT}/usr/lib/modules/${MY_KPV}"
-		rm -r ${ROOT}/usr/lib/modules/${MY_KPV} || ewarn "Modules were not removed"
+		einfo "Modules directory ${ROOT}/usr/lib/modules/${MY_KPV} is not removed"
 	fi
 }
