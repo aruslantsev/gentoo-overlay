@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit python-r1 systemd
 
@@ -17,7 +17,7 @@ S="${WORKDIR}"
 
 LICENSE="BSD rpi-eeprom"
 SLOT="0"
-KEYWORDS="arm arm64"
+KEYWORDS="-* arm arm64"
 IUSE="pi4 pi5"
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
@@ -39,6 +39,9 @@ src_prepare() {
 	sed -i \
 		-e 's:/usr/bin/rpi-eeprom-update:/usr/sbin/rpi-eeprom-update:' \
 		"debian/rpi-eeprom.rpi-eeprom-update.service" || die "Failed sed on rpi-eeprom.rpi-eeprom-update.service"
+	sed -i \
+		-e 's:/usr/lib/firmware:/lib/firmware:' \
+		"${MY_P}/rpi-eeprom-update-default" || die "Failed sed on rpi-eeprom-update-default"
 }
 
 src_configure() {
